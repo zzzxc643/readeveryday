@@ -1,0 +1,9 @@
+{
+  "name": "人民日报评论分析",
+  "short_name": "评论分析",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f7f7f8",
+  "theme_color": "#c0392b",
+  "icons": []
+}

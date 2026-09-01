@@ -1,0 +1,65 @@
+name: 每日人民日报评论分析
+
+on:
+  schedule:
+    # UTC 21:30 = 北京时间次日 05:30
+    - cron: '30 21 * * *'
+  workflow_dispatch:        # 允许在 GitHub 页面手动触发
+
+permissions:
+  contents: write           # 允许把生成的网页与数据提交回仓库
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 安装依赖
+        run: pip install -r requirements.txt
+
+      - name: 运行流水线（抓取 → DeepSeek → 建站）
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: python main.py
+
+      - name: 提交生成的数据与网页
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add data docs
+          git commit -m "自动更新 $(date -u +%Y-%m-%d)" || echo "无变更"
+          git push
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 检出代码（含最新提交）
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: 配置 Pages
+        uses: actions/configure-pages@v5
+
+      - name: 上传 docs 目录
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
