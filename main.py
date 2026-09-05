@@ -27,11 +27,12 @@ def run(date_str=None, top_n=2, skip_ai=False):
     y, m, dd = f'{d.year}', f'{d.month:02d}', f'{d.day:02d}'
     day = f'{y}{m}{dd}'
 
-    print(f'[1/3] 抓取 {y}-{m}-{dd} 评论版前 {top_n} 篇...')
-    articles = crawler.crawl_comments(y, m, dd, top_n=top_n)
+    print(f'[1/3] 抓取 {y}-{m}-{dd}：遍历所有版面查找评论版...')
+    articles, page_name = crawler.crawl_comments(y, m, dd, top_n=top_n)
     if not articles:
-        print('  未抓到任何文章（当天可能未发布或版面结构变化）。')
+        print('  当天没有评论版（或报纸未发布），暂停推送，不生成内容。')
         return
+    print(f'  评论版：{page_name}，取前 {len(articles)} 篇：')
     for a in articles:
         print(f'  - {a["title"]} ({len(a["body"])}字)')
 
