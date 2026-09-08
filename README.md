@@ -6,7 +6,7 @@
 ## 流程
 
 ```
-GitHub Actions(每日 05:30 北京时间)
+GitHub Actions(每日 07:00 北京时间)
   → 爬人民日报评论版前 2 篇
   → 每篇交给 DeepSeek 分析（五段式）
   → 生成静态网页(docs/)
@@ -47,7 +47,7 @@ python -m http.server 8757 --directory docs
    New repository secret，添加 `DEEPSEEK_API_KEY`。
 4. **开 Pages**：仓库 → Settings → Pages → Source 选 **GitHub Actions**。
 5. **触发一次**：Actions 页面 → 选 workflow → Run workflow（手动测试）。
-   之后每天北京时间 05:30 自动运行。
+   之后每天北京时间 07:00 自动运行。
 6. **访问**：部署成功后网址为 `https://<用户名>.github.io/<仓库名>/`。
    iPhone Safari 打开 → 分享 → 添加到主屏幕。
 

@@ -2,8 +2,8 @@ name: 每日人民日报评论分析
 
 on:
   schedule:
-    # UTC 21:30 = 北京时间次日 05:30
-    - cron: '30 21 * * *'
+    # UTC 23:00 = 北京时间次日 07:00
+    - cron: '0 23 * * *'
   workflow_dispatch:        # 允许在 GitHub 页面手动触发
 
 permissions:
